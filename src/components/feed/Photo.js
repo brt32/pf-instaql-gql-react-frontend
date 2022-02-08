@@ -12,6 +12,7 @@ import {
 import { faHeart as SolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { gql, useMutation } from "@apollo/client";
 import Comments from "./Comments";
+import { Link } from "react-router-dom";
 
 const TOGGLE_LIKE_MUTATION = gql`
   mutation toggleLike($id: Int!) {
@@ -23,28 +24,30 @@ const TOGGLE_LIKE_MUTATION = gql`
 `;
 
 const PhotoContainer = styled.div`
-  background-color: #fff;
+  background-color: white;
+  border-radius: 4px;
   border: 1px solid ${(props) => props.theme.borderColor};
-  margin-bottom: 20px;
+  margin-bottom: 60px;
   max-width: 615px;
 `;
-
 const PhotoHeader = styled.div`
   padding: 15px;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid rgb(239, 239, 239);
 `;
 
 const Username = styled(FatText)`
-  margin-left: 5px;
+  margin-left: 15px;
 `;
 
 const PhotoFile = styled.img`
   min-width: 100%;
+  max-width: 100%;
 `;
 
 const PhotoData = styled.div`
-  padding: 15px;
+  padding: 12px 15px;
 `;
 
 const PhotoActions = styled.div`
@@ -103,6 +106,7 @@ function Photo({
           },
         },
       });
+      // Older cache mofidy aproach:
       // const fragment = gql`
       //   fragment BSName on Photo {
       //     isLiked
@@ -137,8 +141,12 @@ function Photo({
   return (
     <PhotoContainer key={id}>
       <PhotoHeader>
-        <Avatar lg url={user.avatar} />
-        <Username>{user.username}</Username>
+        <Link to={`/users/${user.username}`}>
+          <Avatar lg url={user.avatar} />
+        </Link>
+        <Link to={`/users/${user.username}`}>
+          <Username>{user.username}</Username>
+        </Link>
       </PhotoHeader>
       <PhotoFile src={file} />
       <PhotoData>

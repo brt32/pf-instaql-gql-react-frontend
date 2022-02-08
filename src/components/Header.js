@@ -19,6 +19,9 @@ const SHeader = styled.header`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 999;
 `;
 
 const Wrapper = styled.div`
@@ -61,12 +64,16 @@ const Header = () => {
           {isLoggedIn ? (
             <IconsContainer>
               <Icon>
-                <FontAwesomeIcon icon={faHome} size="lg" />
+                <Link to={`/`}>
+                  <FontAwesomeIcon icon={faHome} size="lg" />
+                </Link>
               </Icon>
               <Icon>
                 <FontAwesomeIcon icon={faCompass} size="lg" />
               </Icon>
-              <Avatar url={data?.me?.avatar} />
+              <Link to={`/users/${data?.me?.username}`}>
+                <Avatar url={data?.me?.avatar} />
+              </Link>
             </IconsContainer>
           ) : (
             <Link href={routes.home}>

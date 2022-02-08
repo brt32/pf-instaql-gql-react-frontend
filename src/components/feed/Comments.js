@@ -53,6 +53,7 @@ function Comments({ photoId, author, caption, commentNumber, comments }) {
       },
     } = result;
 
+    // Creating fake comment for cache
     if (ok && userData?.me) {
       const newComment = {
         __typename: "Comment",
@@ -64,11 +65,27 @@ function Comments({ photoId, author, caption, commentNumber, comments }) {
           ...userData.me,
         },
       };
+      const newCacheComment = cache.writeFragment({
+        data: newComment,
+        fragment: gql`
+          fragment BSName on Comment {
+            id
+            createdAt
+            isMine
+            payload
+            user {
+              username
+              avatar
+            }
+          }
+        `,
+      });
+      console.log(newCacheComment);
       cache.modify({
         id: `Photo:${photoId}`,
         fields: {
           comments(prev) {
-            return [...prev, newComment];
+            return [...prev, newCacheComment];
           },
           commentNumber(prev) {
             return prev + 1;
@@ -106,6 +123,9 @@ function Comments({ photoId, author, caption, commentNumber, comments }) {
       </CommentCount>
       {comments?.map((comment) => (
         <Comment
+          id={comment.id}
+          isMine={comment.isMine}
+          photoId={photoId}
           key={comment.id}
           author={comment.user.username}
           payload={comment.payload}
